@@ -1,18 +1,18 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <doxygen-xml msg="Welcome to Doxygen XML" />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+import DoxygenXml from '@/components/DoxygenXml.vue'
 
 export default {
-  name: "Home",
+  name: 'Home',
   components: {
-    HelloWorld
+    DoxygenXml
   }
-};
+}
 </script>
