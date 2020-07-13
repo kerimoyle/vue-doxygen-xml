@@ -44,6 +44,7 @@ export default {
 </script>
 
 <style scoped>
+/*
 dl.function {
   margin-top: 15px;
   margin-bottom: 3px;
@@ -56,4 +57,5 @@ dl.function > dt {
 dl.function > dt > span:first-child {
   margin-left: 11px;
 }
+*/
 </style>
