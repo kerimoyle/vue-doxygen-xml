@@ -1,3 +1,3 @@
-import DoxygenXml from "./components/DoxygenXml.vue";
+import DoxygenXml from './components/DoxygenXml.vue'
 
-export default DoxygenXml;
+export default DoxygenXml

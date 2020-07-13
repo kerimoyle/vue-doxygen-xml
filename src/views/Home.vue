@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
+    <img alt="Project logo" src="@/assets/logo.svg" />
     <doxygen-xml msg="Welcome to Doxygen XML" />
   </div>
 </template>
@@ -16,3 +16,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+img {
+  width: 17em;
+}
+</style>
