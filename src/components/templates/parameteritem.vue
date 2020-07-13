@@ -11,8 +11,7 @@ export default {
   },
   data() {
     return {
-      tagName: 'li',
-      element: this.data.element
+      tagName: 'li'
     }
   }
 }

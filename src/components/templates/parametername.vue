@@ -11,8 +11,7 @@ export default {
   },
   data() {
     return {
-      tagName: 'code',
-      element: this.data.element
+      tagName: 'code'
     }
   }
 }

@@ -11,8 +11,7 @@ export default {
   },
   data() {
     return {
-      tagName: 'span',
-      element: this.data.element
+      tagName: 'span'
     }
   }
 }

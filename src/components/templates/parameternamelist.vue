@@ -11,7 +11,6 @@ export default {
   },
   data() {
     return {
-      element: this.data.element,
       tagName: 'span'
     }
   }

@@ -9,11 +9,6 @@ export default {
       type: Object
     }
   },
-  data() {
-    return {
-      element: this.data.element
-    }
-  },
   // Override the mixin render function
   render(h) {
     return h(
