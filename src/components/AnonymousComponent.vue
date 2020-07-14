@@ -25,6 +25,11 @@ export default {
       defaultComponent: false
     }
   },
+  watch: {
+    componentType: function() {
+      this.component = () => this.loader()
+    }
+  },
   computed: {
     loader() {
       if (!this.componentType) {

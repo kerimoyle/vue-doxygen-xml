@@ -55,26 +55,11 @@ function getDescriptions(element) {
   }
 }
 
-function parseMemberDef(element) {
-  const { brief, detailed } = getDescriptions(element)
-  return {
-    id: element.getAttribute('id'),
-    name: element.querySelector('name'),
-    argsString: decodeHTML(element.querySelector('argsstring').innerHTML),
-    kind: element.getAttribute('kind'),
-    accessSpecifier: element.getAttribute('prot'),
-    memberDefType: parseLinkedTextType(element.querySelector('type')),
-    definition: element.querySelector('definition'),
-    brief,
-    detailed
-  }
-}
-
 function parseMemberDefs(element) {
   const memberDefElements = element.querySelectorAll('memberdef')
   let memberDefs = []
   memberDefElements.forEach(memberDefElement => {
-    memberDefs.push(parseMemberDef(memberDefElement))
+    memberDefs.push(processMemberDef(memberDefElement))
   })
   return memberDefs
 }
@@ -208,11 +193,61 @@ function parsePublicFunctions(elements) {
   elements.forEach(element => {
     const memberDefs = element.querySelectorAll('memberdef')
     memberDefs.forEach(memberDef => {
-      publicFunctions.push(parsePublicFunction(memberDef))
+      publicFunctions.push(processMemberDef(memberDef))
     })
   })
 
   return publicFunctions
+}
+
+function parsePublicEnum(element) {
+  const { brief, detailed } = getDescriptions(element)
+  return {
+    id: element.getAttribute('id'),
+    brief,
+    detailed,
+    name: element.querySelector('name').innerHTML
+  }
+}
+
+function parsePublicTypedef(element) {
+  const { brief, detailed } = getDescriptions(element)
+  return {
+    id: element.getAttribute('id'),
+    definition: element.querySelector('definition').innerHTML,
+    typedefType: parseLinkedTextType(element.querySelector('type')),
+    brief,
+    detailed,
+    name: element.querySelector('name').innerHTML
+  }
+}
+
+function processMemberDef(memberDef) {
+  const kind = memberDef.getAttribute('kind')
+  let item = undefined
+  if (kind === 'enum') {
+    item = parsePublicEnum(memberDef)
+  } else if (kind === 'function') {
+    item = parsePublicFunction(memberDef)
+  } else if (kind === 'typedef') {
+    item = parsePublicTypedef(memberDef)
+  } else {
+    console.log(`Yikes, we have hit an unknown memberDef '${kind}'`)
+  }
+
+  return item
+}
+
+function parsePublicTypes(elements) {
+  let publicTypes = []
+  elements.forEach(element => {
+    const memberDefs = element.querySelectorAll('memberdef')
+    memberDefs.forEach(memberDef => {
+      publicTypes.push(processMemberDef(memberDef))
+    })
+  })
+
+  return publicTypes
 }
 
 function parseClass(element) {
@@ -228,6 +263,9 @@ function parseClass(element) {
   const location = parseLocationType(element.querySelector('location'))
   let listOfAllMembers = parseListOfAllMembers(
     element.querySelector('listofallmembers')
+  )
+  let publicTypes = parsePublicTypes(
+    element.querySelectorAll('sectiondef[kind="public-type"]')
   )
   let publicFunctions = parsePublicFunctions(
     element.querySelectorAll('sectiondef[kind="public-func"]')
@@ -245,6 +283,7 @@ function parseClass(element) {
     derivedClasses,
     location,
     listOfAllMembers,
+    publicTypes,
     publicFunctions,
     publicStaticFunctions
   }

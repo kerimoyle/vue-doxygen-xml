@@ -2,7 +2,7 @@
   <div class="namespace-container">
     <section id="data.id">
       <h1>Namespace {{ data.name }} reference</h1>
-      <brief-description :element="briefDescription" />
+      <brief-description :data="briefDescription" />
       <ul class="namespace-group">
         <section :id="data.id + '_classes'">
           <li class="namespace-group-item"><h2>Classes</h2></li>
@@ -12,38 +12,33 @@
               :key="data.name + '_' + namespaceClassIndex"
               class="class-list-item"
             >
-              <router-link
-                :to="{ path: `${$route.fullPath}/${namespaceClass.refId}` }"
-                >{{ namespaceClass.name }}</router-link
-              >
+              <router-link :to="namespaceClass.refId">{{
+                namespaceClass.name
+              }}</router-link>
             </li>
           </ul>
         </section>
         <section :id="data.id + '_typedefs'" v-if="haveTypeDefs">
           <li class="namespace-group-item"><h2>Type Definitions</h2></li>
-          <ul class="class-list">
+          <ul class="typedef-list">
             <li
               v-for="(namespaceTypeDef, namespaceTypeDefIndex) in typeDefs"
               :key="data.name + '_' + namespaceTypeDefIndex"
-              class="class-list-item"
+              class="typedef-list-item"
             >
-              <span :id="namespaceTypeDef.id">{{
-                decodeHTML(namespaceTypeDef.definition.textContent)
-              }}</span>
+              <typedef :data="namespaceTypeDef" />
             </li>
           </ul>
         </section>
         <section :id="data.id + '_functions'" v-if="haveFunctions">
           <li class="namespace-group-item"><h2>Functions</h2></li>
-          <ul class="class-list">
+          <ul class="namespace-function-list">
             <li
-              v-for="(namespaceFunctions, namespaceFunctionsIndex) in functions"
+              v-for="(namespaceFunction, namespaceFunctionsIndex) in functions"
               :key="data.name + '_' + namespaceFunctionsIndex"
-              class="class-list-item"
+              class="namespace-function-list-item"
             >
-              <span :id="namespaceFunctions.id">{{
-                decodeHTML(namespaceFunctions.definition.textContent)
-              }}</span>
+              <public-function :data="namespaceFunction" />
             </li>
           </ul>
         </section>
@@ -54,12 +49,14 @@
 
 <script>
 import BriefDescription from '@/components/BriefDescription'
+import PublicFunction from '@/components/PublicFunction'
+import Typedef from '@/components/Typedef'
 
 import { isEmptyTextElement, decodeHTML } from '@/js/utilities'
 
 export default {
   name: 'Namespace',
-  components: { BriefDescription },
+  components: { BriefDescription, PublicFunction, Typedef },
   props: {
     data: {
       type: Object,
@@ -73,7 +70,7 @@ export default {
         brief = document.createElement('P')
         brief.innerHTML = 'Brief description is missing.'
       }
-      return brief
+      return { element: brief }
     },
     haveTypeDefs() {
       return this.haveSection('typedef')
