@@ -200,13 +200,30 @@ function parsePublicFunctions(elements) {
   return publicFunctions
 }
 
-function parsePublicEnum(element) {
+function parseEnumValue(element) {
   const { brief, detailed } = getDescriptions(element)
   return {
     id: element.getAttribute('id'),
     brief,
     detailed,
     name: element.querySelector('name').innerHTML
+  }
+}
+
+function parsePublicEnum(element) {
+  const { brief, detailed } = getDescriptions(element)
+  let enumValues = []
+  const enumValueElements = element.querySelectorAll('enumvalue')
+  enumValueElements.forEach(enumValue => {
+    enumValues.push(parseEnumValue(enumValue))
+  })
+  return {
+    id: element.getAttribute('id'),
+    kind: element.getAttribute('kind'),
+    brief,
+    detailed,
+    name: element.querySelector('name').innerHTML,
+    enumValues
   }
 }
 

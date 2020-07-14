@@ -56,6 +56,15 @@
           </li>
         </ul>
       </div>
+      <template v-if="data.publicTypes.length">
+        <h2>Public Types</h2>
+        <section
+          v-for="publicType in data.publicTypes"
+          :key="`public_enum_${publicType.id}`"
+        >
+          <enum v-if="publicType.kind === 'enum'" :data="publicType" />
+        </section>
+      </template>
       <template v-if="data.publicFunctions.length">
         <section :id="'public_function_section_' + data.id">
           <h2>Public Functions</h2>
@@ -122,11 +131,12 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import RouterLinkList from '@/components/RouterLinkList'
-import PublicFunction from '@/components/PublicFunction'
-import DetailedDescription from '@/components/DetailedDescription'
 import BriefDescription from '@/components/BriefDescription'
+import DetailedDescription from '@/components/DetailedDescription'
+import Enum from '@/components/Enum'
 import LinkedText from '@/components/LinkedText'
+import PublicFunction from '@/components/PublicFunction'
+import RouterLinkList from '@/components/RouterLinkList'
 
 import { removeDeletedFunctions, isEmptyTextElement } from '@/js/utilities'
 
@@ -136,6 +146,7 @@ export default {
     LinkedText,
     BriefDescription,
     DetailedDescription,
+    Enum,
     RouterLinkList,
     PublicFunction
   },
