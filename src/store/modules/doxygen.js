@@ -22,6 +22,10 @@ export const mutations = {
 
 export const actions = {
   fetchPage({ commit, getters }, page_name) {
+    const existingPage = getters.getPageById(page_name)
+    if (existingPage) {
+      return Promise.resolve(existingPage)
+    }
     if (getters.isInflight(page_name)) {
       return getters.getInflight(page_name)
     }

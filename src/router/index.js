@@ -15,26 +15,20 @@ const pageType = pageName => {
 export const updateDoxygenRoute = (routeTo, next) => {
   const mainPage = routeTo.fullPath === '/help'
   const pageName = mainPage ? 'index' : routeTo.params.pageName
-  const getPageById = store.getters['doxygen/getPageById']
-  const existingData = getPageById(pageName)
   if (!mainPage) {
     routeTo.params.componentType = pageType(pageName)
   }
-  if (existingData) {
-    routeTo.params.data = existingData
-    next()
-  } else {
-    store.dispatch('doxygen/fetchPage', pageName).then(page => {
-      routeTo.params.data = page
-      if (mainPage) {
+
+  store.dispatch('doxygen/fetchPage', pageName).then(page => {
+    routeTo.params.data = page
+    if (mainPage) {
+      next()
+    } else {
+      store.dispatch('doxygen/fetchDependeePages', pageName).then(() => {
         next()
-      } else {
-        store.dispatch('doxygen/fetchDependeePages', pageName).then(() => {
-          next()
-        })
-      }
-    })
-  }
+      })
+    }
+  })
 }
 
 const routes = [
