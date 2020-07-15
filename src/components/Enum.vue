@@ -10,6 +10,7 @@
       <tr
         v-for="(enumValue, index) in data.enumValues"
         :key="`enum_${data.name}_${index}`"
+        :id="enumValue.id"
       >
         <td>{{ enumValue.name }}</td>
         <td><brief-description :data="{ element: enumValue.brief }" /></td>
@@ -20,7 +21,6 @@
 
 <script>
 import BriefDescription from '@/components/BriefDescription'
-// import LinkedText from '@/components/LinkedText'
 
 export default {
   name: 'Enum',

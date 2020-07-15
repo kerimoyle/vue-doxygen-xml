@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { decodeHTML } from '@/js/utilities'
 
 export default {
@@ -31,6 +31,55 @@ export default {
     link: {
       type: Object
     }
+  },
+  data: function() {
+    return {
+      derivedLink: { path: undefined, hash: undefined }
+    }
+  },
+  mounted: function() {
+    if (this.link) {
+      this.derivedLink = this.link
+    }
+    if (this.item.reference === null) {
+      return
+    }
+    if (this.item.reference.refKind === 'member') {
+      this.derivedLink.hash = this.item.reference.refId
+      this.derivedLink.path = this.getPageIdForReferenceId(
+        this.derivedLink.hash
+      )
+      if (this.derivedLink.path === undefined) {
+        this.fetchPageBasedOnReferenceId(this.item.reference.refId, 1)
+      }
+    } else if (this.item.reference.refKind === 'compound') {
+      this.derivedLink.path = this.item.reference.refId
+      this.derivedLink.hash = ''
+    } else {
+      console.log('Found a doxygen ref that is not being handled! Eeek.')
+    }
+  },
+  methods: {
+    fetchPageBasedOnReferenceId(referenceId, attempt) {
+      const splitReferenceId = referenceId.split('_')
+      if (attempt < splitReferenceId.length) {
+        // We are given a reference id so this won't match a page name which we need.
+        // So we will split on '_' and then start to stitch a page name together.
+        let potentialPageName = splitReferenceId.splice(0, attempt).join('_')
+        this.fetchPage(potentialPageName)
+          .then(response => {
+            this.derivedLink.path = response.id
+          })
+          .catch(() => {
+            this.fetchPageBasedOnReferenceId(referenceId, attempt + 1)
+          })
+      } else {
+        console.log(
+          `Could not determine the page that reference '${referenceId}' came from.`
+        )
+      }
+    },
+    ...mapActions('doxygen', ['fetchPage'])
   },
   computed: {
     ...mapGetters({
@@ -47,10 +96,10 @@ export default {
       return decodeHTML(preText)
     },
     postDecodedText() {
-      const preText = this.item.text.split(this.item.linkedText)[1]
-      return decodeHTML(preText)
+      const postText = this.item.text.split(this.item.linkedText)[1]
+      return decodeHTML(postText)
     },
-    derivedLink() {
+    myDerivedLink() {
       if (this.link) {
         return this.link
       }
@@ -58,6 +107,12 @@ export default {
       if (this.item.reference.refKind === 'member') {
         derivedLink.hash = this.item.reference.refId
         derivedLink.path = this.getPageIdForReferenceId(derivedLink.hash)
+        if (derivedLink.path === undefined) {
+          // console.log(
+          //   'damn couldnt get path for link',
+          //   this.item.reference.refId
+          // )
+        }
       } else if (this.item.reference.refKind === 'compound') {
         derivedLink.path = this.item.reference.refId
         derivedLink.hash = ''

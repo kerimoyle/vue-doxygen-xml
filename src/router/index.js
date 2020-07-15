@@ -29,7 +29,7 @@ export const updateDoxygenRoute = (routeTo, next) => {
       if (mainPage) {
         next()
       } else {
-        store.dispatch('doxygen/fetchDependeePages', { pageName }).then(() => {
+        store.dispatch('doxygen/fetchDependeePages', pageName).then(() => {
           next()
         })
       }

@@ -4,24 +4,42 @@ import { parsePage } from '@/js/doxygenparser'
 export const namespaced = true
 
 export const state = {
-  pages: []
+  pages: [],
+  inflight: new Map()
 }
 
 export const mutations = {
   APPEND_PAGE(state, page) {
     state.pages.push(page)
+  },
+  ADD_INFLIGHT(state, payload) {
+    state.inflight.set(payload.page_name, payload.pending)
+  },
+  REMOVE_INFLIGHT(state, id) {
+    state.inflight.delete(id)
   }
 }
 
 export const actions = {
-  fetchPage({ commit }, page_name) {
-    return DoxygenService.getPage(page_name).then(response => {
-      const page = parsePage(page_name, response.data)
-      commit('APPEND_PAGE', page)
-      return page
-    })
+  fetchPage({ commit, getters }, page_name) {
+    if (getters.isInflight(page_name)) {
+      return getters.getInflight(page_name)
+    }
+    const pending = DoxygenService.getPage(page_name)
+      .then(response => {
+        const page = parsePage(page_name, response.data)
+        commit('APPEND_PAGE', page)
+        commit('REMOVE_INFLIGHT', page_name)
+        return page
+      })
+      .catch(error => {
+        commit('REMOVE_INFLIGHT', page_name)
+        throw error
+      })
+    commit('ADD_INFLIGHT', { page_name, pending })
+    return pending
   },
-  fetchDependeePages({ commit, getters }, { pageName }) {
+  fetchDependeePages({ dispatch, getters }, pageName) {
     const dependentPage = getters.getPageById(pageName)
     let pageNames = []
     if (dependentPage) {
@@ -36,16 +54,9 @@ export const actions = {
 
     let promises = []
     pageNames.forEach(pageName => {
-      promises.push(DoxygenService.getPage(pageName))
+      promises.push(dispatch('fetchPage', pageName))
     })
-    return Promise.all(promises).then(pagesReceived => {
-      let i = 0
-      pagesReceived.forEach(response => {
-        const pageName = pageNames[i++]
-        const parsedPage = parsePage(pageName, response.data)
-        commit('APPEND_PAGE', parsedPage)
-      })
-    })
+    return Promise.all(promises)
   }
 }
 
@@ -53,14 +64,20 @@ export const getters = {
   getPageById: state => id => {
     return state.pages.find(page => page.id === id)
   },
+  dispalyInflight: state => () => {
+    console.log(state.inflight)
+  },
+  isInflight: state => id => {
+    return !!state.inflight.get(id)
+  },
+  getInflight: state => id => {
+    return state.inflight.get(id)
+  },
   getPageIdForReferenceId: state => reference => {
     const candidatePage = state.pages.find(page =>
       reference.startsWith(page.id)
     )
-    if (candidatePage) {
-      return candidatePage.id
-    }
-    return candidatePage
+    return candidatePage ? candidatePage.id : undefined
   },
   getPageByName: state => name => {
     return state.pages.find(page => page.name === name)
