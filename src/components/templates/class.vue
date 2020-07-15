@@ -49,7 +49,6 @@
                 hash: item.link.hash
                 // params: item.link.params,
               }"
-              append
               >{{ item.name }}</router-link
             >{{ item.argsString }} :
             <linked-text :item="item.returnType" :link="item.link" />
@@ -231,7 +230,7 @@ export default {
                   memberFunction.argsString,
                   memberFunction.returnType,
                   memberFunction.id,
-                  `${this.$route.fullPath}/${dependee.id}`
+                  dependee.id
                 )
               )
             }
