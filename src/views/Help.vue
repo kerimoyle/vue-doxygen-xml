@@ -1,11 +1,11 @@
 <template>
-  <anonymous-component :component-data="data"></anonymous-component>
+  <doxygen-component :component-data="data"></doxygen-component>
 </template>
 
 <script>
 // @ is an alias to /src
 import { updateDoxygenRoute } from '@/router/modules/doxygen'
-import AnonymousComponent from '@/components/AnonymousComponent'
+import DoxygenComponent from '@/components/DoxygenComponent'
 
 // This is horrible relies 100% on the fact that the page has finished loading by the time this fires.
 const scrollDelay = 500
@@ -40,7 +40,7 @@ const updateRoute = function(to, next) {
 export default {
   name: 'Home',
   components: {
-    AnonymousComponent
+    DoxygenComponent
   },
   beforeRouteEnter(routeTo, routeFrom, next) {
     updateRoute(routeTo, next)

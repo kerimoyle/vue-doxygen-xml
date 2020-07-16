@@ -12,9 +12,9 @@ const childLinkedText = node => {
   ]
 }
 
-const childAnonymousComponent = node => {
+const childDoxygenComponent = node => {
   return [
-    'AnonymousComponent',
+    'DoxygenComponent',
     {
       props: {
         componentData: {
@@ -28,7 +28,7 @@ const childAnonymousComponent = node => {
 
 export const doxygenChildren = {
   components: {
-    AnonymousComponent: () => import('@/components/AnonymousComponent'),
+    DoxygenComponent: () => import('@/components/DoxygenComponent'),
     LinkedText: () => import('@/components/LinkedText')
   },
   props: {
@@ -63,7 +63,7 @@ export const doxygenChildren = {
         } else if (node.nodeName === 'ref') {
           childElement = childLinkedText(node)
         } else {
-          childElement = childAnonymousComponent(node)
+          childElement = childDoxygenComponent(node)
         }
         childElements.push(childElement)
       })

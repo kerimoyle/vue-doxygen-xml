@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'AnonymousComponent',
+  name: 'DoxygenComponent',
   props: {
     componentData: {
       type: Object,
