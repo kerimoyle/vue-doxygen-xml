@@ -2,11 +2,20 @@
 import { doxygenChildren } from '@/mixins/DoxygenChildren'
 
 export default {
-  name: 'parameterlist',
+  name: 'simplesect',
   mixins: [doxygenChildren],
   props: {
     data: {
       type: Object
+    }
+  },
+  computed: {
+    heading() {
+      const kind = this.data.element.getAttribute('kind')
+
+      return kind === 'see'
+        ? 'See also'
+        : kind.charAt(0).toUpperCase() + kind.slice(1)
     }
   },
   // Override the mixin render function
@@ -14,7 +23,7 @@ export default {
     return h(
       'dl', // tag name
       [
-        h('dt', [h('strong', 'Return')]),
+        h('dt', [h('strong', this.heading)]),
         h('dd', [
           h(
             'p',
