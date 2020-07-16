@@ -49,7 +49,7 @@ export default {
         } else if (id.startsWith('namespace')) {
           _type = 'namespace'
         } else {
-          console.log(
+          console.warn(
             `We have come across a page with id '${id}' that is unknown to us things are going to go poorly from here.`
           )
         }

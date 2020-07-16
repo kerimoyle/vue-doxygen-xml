@@ -4,7 +4,7 @@ import * as DoxygenStore from '@/store/modules/doxygen'
 
 function install(Vue, options = {}) {
   if (!options.store) {
-    console.log('Please provide a store!!')
+    console.error('Please provide a store!!')
   }
 
   // Vue.component('your-component', yourComponent)
