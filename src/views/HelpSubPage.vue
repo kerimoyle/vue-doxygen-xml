@@ -1,8 +1,5 @@
 <template>
-  <anonymous-component
-    :component-data="data"
-    :component-type="componentType"
-  ></anonymous-component>
+  <anonymous-component :component-data="data"></anonymous-component>
 </template>
 
 <script>
@@ -14,10 +11,6 @@ export default {
   props: {
     data: {
       type: Object,
-      required: true
-    },
-    componentType: {
-      type: String,
       required: true
     }
   },
