@@ -23,27 +23,11 @@ const routes = [
     path: '/help/:pageName?',
     name: 'Help',
     props: true,
-    // beforeEnter(routeTo, routeFrom, next) {
-    //   updateDoxygenRoute(routeTo, next)
-    // },
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "help" */ '../views/Help.vue')
   }
-  // {
-  //   path: '/help/:pageName',
-  //   name: 'Help Subpage',
-  //   props: true,
-  //   beforeEnter(routeTo, routeFrom, next) {
-  //     updateDoxygenRoute(routeTo, next)
-  //   },
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () =>
-  //     import(/* webpackChunkName: "help" */ '../views/HelpSubPage.vue')
-  // }
 ]
 
 const router = new VueRouter({
