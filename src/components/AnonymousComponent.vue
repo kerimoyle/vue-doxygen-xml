@@ -1,9 +1,5 @@
 <template>
-  <component
-    :is="component"
-    :data="componentData"
-    :name="defaultComponent ? componentType : undefined"
-  />
+  <component :is="component" :data="componentData" :name="componentType()" />
 </template>
 
 <script>
@@ -12,10 +8,6 @@ export default {
   props: {
     componentData: {
       type: Object,
-      required: true
-    },
-    componentType: {
-      type: String,
       required: true
     }
   },
@@ -26,16 +18,13 @@ export default {
     }
   },
   watch: {
-    componentType: function() {
+    componentData: function() {
       this.component = () => this.loader()
     }
   },
   computed: {
     loader() {
-      if (!this.componentType) {
-        return null
-      }
-      return () => import(`@/components/templates/${this.componentType}`)
+      return () => import(`@/components/templates/${this.componentType()}`)
     }
   },
   mounted() {
@@ -47,6 +36,20 @@ export default {
         this.defaultComponent = true
         this.component = () => import('@/components/Default')
       })
+  },
+  methods: {
+    componentType() {
+      let _type = undefined
+      if (Object.prototype.hasOwnProperty.call(this.componentData, 'id')) {
+        const id = this.componentData.id
+        _type = id.startsWith('class') ? 'class' : 'namespace'
+      } else if (
+        Object.prototype.hasOwnProperty.call(this.componentData, 'element')
+      ) {
+        _type = this.componentData.element.nodeName
+      }
+      return _type
+    }
   }
 }
 </script>
