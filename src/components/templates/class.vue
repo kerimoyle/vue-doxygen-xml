@@ -76,7 +76,7 @@
               <td>
                 <router-link
                   :to="{
-                    name: $route.name,
+                    path: $route.path,
                     hash: '#' + publicFunction.id
                     // params: $route.params,
                   }"
@@ -99,7 +99,7 @@
               <td>
                 <router-link
                   :to="{
-                    name: $route.name,
+                    path: $route.path,
                     hash: '#' + publicStaticFunction.id
                     // params: $route.params,
                   }"

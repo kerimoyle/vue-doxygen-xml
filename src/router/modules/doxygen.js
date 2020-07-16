@@ -10,10 +10,7 @@ export const getPageStem = routeTo => {
 }
 
 export const updateDoxygenRoute = (routeTo, next) => {
-  const mainPage = !Object.prototype.hasOwnProperty.call(
-    routeTo.params,
-    'pageName'
-  )
+  const mainPage = routeTo.params.pageName === undefined
   const pageName = mainPage ? 'index' : routeTo.params.pageName
   const pageStem = getPageStem(routeTo)
   store

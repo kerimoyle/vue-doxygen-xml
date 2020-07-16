@@ -42,12 +42,23 @@ export default {
       let _type = undefined
       if (Object.prototype.hasOwnProperty.call(this.componentData, 'id')) {
         const id = this.componentData.id
-        _type = id.startsWith('class') ? 'class' : 'namespace'
+        if (id === 'index') {
+          _type = 'index'
+        } else if (id.startsWith('class')) {
+          _type = 'class'
+        } else if (id.startsWith('namespace')) {
+          _type = 'namespace'
+        } else {
+          console.log(
+            `We have come across a page with id '${id}' that is unknown to us things are going to go poorly from here.`
+          )
+        }
       } else if (
         Object.prototype.hasOwnProperty.call(this.componentData, 'element')
       ) {
         _type = this.componentData.element.nodeName
       }
+
       return _type
     }
   }
