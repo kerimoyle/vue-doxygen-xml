@@ -22,14 +22,14 @@ const isInViewport = function(elem) {
   )
 }
 
-const updateRoute = function(to, next) {
+const updateRoute = function(to, from, next) {
   updateDoxygenRoute(to, next)
-  if (to.hash) {
+  if (!from.name && to.hash) {
     setTimeout(() => {
-      const toHash = document.querySelector(to.hash)
-      if (toHash) {
+      const toElem = document.querySelector(to.hash)
+      if (toElem) {
         window.scrollTo({
-          top: toHash.offsetTop,
+          top: toElem.offsetTop,
           behavior: 'smooth'
         })
       }
@@ -43,7 +43,7 @@ export default {
     DoxygenComponent
   },
   beforeRouteEnter(routeTo, routeFrom, next) {
-    updateRoute(routeTo, next)
+    updateRoute(routeTo, routeFrom, next)
   },
   beforeRouteUpdate(to, from, next) {
     if (to.path === from.path) {
@@ -58,7 +58,7 @@ export default {
         }
       }
     } else {
-      updateRoute(to, next)
+      updateRoute(to, from, next)
     }
   },
   props: ['data']
