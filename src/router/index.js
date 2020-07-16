@@ -1,36 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '@/views/Home.vue'
-import store from '@/store'
+import { updateDoxygenRoute } from '@/router/modules/doxygen'
 
 Vue.use(VueRouter)
-
-const pageType = pageName => {
-  if (pageName.startsWith('namespace')) {
-    return 'namespace'
-  }
-  return 'class'
-}
-
-export const updateDoxygenRoute = (routeTo, next) => {
-  const mainPage = routeTo.fullPath === '/help'
-  const pageName = mainPage ? 'index' : routeTo.params.pageName
-  if (!mainPage) {
-    routeTo.params.componentType = pageType(pageName)
-  }
-
-  store.dispatch('doxygen/fetchPage', pageName).then(page => {
-    routeTo.params.data = page
-    if (mainPage) {
-      next()
-    } else {
-      store.dispatch('doxygen/fetchDependeePages', pageName).then(() => {
-        next()
-      })
-    }
-  })
-}
-
 const routes = [
   {
     path: '/',

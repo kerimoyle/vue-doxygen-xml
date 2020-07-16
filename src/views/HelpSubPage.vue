@@ -4,7 +4,7 @@
 
 <script>
 import AnonymousComponent from '@/components/AnonymousComponent'
-import { updateDoxygenRoute } from '@/router/index'
+import { updateDoxygenRoute } from '@/router/modules/doxygen'
 
 export default {
   name: 'HelpSubPage',

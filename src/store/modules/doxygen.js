@@ -21,7 +21,9 @@ export const mutations = {
 }
 
 export const actions = {
-  fetchPage({ commit, getters }, page_name) {
+  fetchPage({ commit, getters }, payload) {
+    const page_name = payload.page_name
+    // const page_stem = payload.page_stem
     const existingPage = getters.getPageById(page_name)
     if (existingPage) {
       return Promise.resolve(existingPage)
@@ -43,7 +45,9 @@ export const actions = {
     commit('ADD_INFLIGHT', { page_name, pending })
     return pending
   },
-  fetchDependeePages({ dispatch, getters }, pageName) {
+  fetchDependeePages({ dispatch, getters }, payload) {
+    const pageName = payload.page_name
+
     const dependentPage = getters.getPageById(pageName)
     let pageNames = []
     if (dependentPage) {
@@ -58,7 +62,12 @@ export const actions = {
 
     let promises = []
     pageNames.forEach(pageName => {
-      promises.push(dispatch('fetchPage', pageName))
+      promises.push(
+        dispatch('fetchPage', {
+          page_name: pageName,
+          page_stem: payload.page_stem
+        })
+      )
     })
     return Promise.all(promises)
   }

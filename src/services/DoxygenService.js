@@ -1,10 +1,8 @@
 import axios from 'axios'
 
 const apiClient = axios.create({
-  baseURL:
-    process.env.NODE_ENV !== 'production'
-      ? `${process.env.BASE_URL}v0.1.0`
-      : 'https://libcellml.github.io/data/doxygen',
+  baseURL: process.env.VUE_APP_DOXYGEN_BASE,
+  // 'https://libcellml.github.io/data/doxygen',
   withCredentials: false,
   headers: {
     Accept: 'text/xml',

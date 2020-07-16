@@ -21,6 +21,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { decodeHTML } from '@/js/utilities'
+import { getPageStem } from '@/router/modules/doxygen'
 
 export default {
   name: 'LinkedText',
@@ -66,7 +67,10 @@ export default {
         // We are given a reference id so this won't match a page name which we need.
         // So we will split on '_' and then start to stitch a page name together.
         let potentialPageName = splitReferenceId.splice(0, attempt).join('_')
-        this.fetchPage(potentialPageName)
+        this.fetchPage({
+          page_name: potentialPageName,
+          page_stem: getPageStem(this.$route)
+        })
           .then(response => {
             this.derivedLink.path = response.id
           })
@@ -107,12 +111,6 @@ export default {
       if (this.item.reference.refKind === 'member') {
         derivedLink.hash = this.item.reference.refId
         derivedLink.path = this.getPageIdForReferenceId(derivedLink.hash)
-        if (derivedLink.path === undefined) {
-          // console.log(
-          //   'damn couldnt get path for link',
-          //   this.item.reference.refId
-          // )
-        }
       } else if (this.item.reference.refKind === 'compound') {
         derivedLink.path = this.item.reference.refId
         derivedLink.hash = ''
