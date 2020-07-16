@@ -138,6 +138,7 @@ import PublicFunction from '@/components/PublicFunction'
 import RouterLinkList from '@/components/RouterLinkList'
 
 import { removeDeletedFunctions, isEmptyTextElement } from '@/js/utilities'
+import { getPageStem } from '@/router/modules/doxygen'
 
 export default {
   name: 'Class',
@@ -248,7 +249,7 @@ export default {
       this.listAllMembersState = !this.listAllMembersState
     },
     getDependees() {
-      return this.getDependeePages(this.data.id)
+      return this.getDependeePages(getPageStem(this.$route), this.data.id)
     },
     createSimplifiedMember(
       refId,

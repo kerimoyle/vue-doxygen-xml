@@ -4,51 +4,73 @@ import { parsePage } from '@/js/doxygenparser'
 export const namespaced = true
 
 export const state = {
-  pages: [],
-  inflight: new Map()
+  pages: new Map(), // Map of routeURL to list of pages
+  urlMap: new Map(), // Map of routeURL to baseURL
+  inflight: new Map() // Map of routeURL to map of page name to pending promise
 }
 
 export const mutations = {
-  APPEND_PAGE(state, page) {
-    state.pages.push(page)
+  APPEND_PAGE(state, { routeURL, page }) {
+    let pages = state.pages.get(routeURL)
+    if (!pages) {
+      pages = []
+    }
+    pages.push(page)
+    state.pages.set(routeURL, pages)
   },
   ADD_INFLIGHT(state, payload) {
-    state.inflight.set(payload.page_name, payload.pending)
+    let inflightMap = state.inflight.get(payload.routeURL)
+    if (!inflightMap) {
+      inflightMap = new Map()
+    }
+    inflightMap.set(payload.page_name, payload.pending)
+    state.inflight.set(payload.routeURL, inflightMap)
   },
-  REMOVE_INFLIGHT(state, id) {
-    state.inflight.delete(id)
+  REMOVE_INFLIGHT(state, { routeURL, id }) {
+    state.inflight.get(routeURL).delete(id)
+  },
+  REGISTER_BASE_URL(state, { baseURL, routeURL }) {
+    const registeredURL = state.pages.get(routeURL)
+    if (!registeredURL) {
+      state.pages.set(routeURL, [])
+      state.urlMap.set(routeURL, baseURL)
+      state.inflight.set(routeURL, new Map())
+    }
   }
 }
 
 export const actions = {
   fetchPage({ commit, getters }, payload) {
     const page_name = payload.page_name
-    // const page_stem = payload.page_stem
-    const existingPage = getters.getPageById(page_name)
+    const page_stem = payload.page_stem
+    const base_url = payload.page_url
+    commit('REGISTER_BASE_URL', { baseURL: base_url, routeURL: page_stem })
+    const existingPage = getters.getPageById(page_stem, page_name)
     if (existingPage) {
       return Promise.resolve(existingPage)
     }
-    if (getters.isInflight(page_name)) {
-      return getters.getInflight(page_name)
+    if (getters.isInflight(page_stem, page_name)) {
+      return getters.getInflight(page_stem, page_name)
     }
-    const pending = DoxygenService.getPage(page_name)
+    const pending = DoxygenService.getPage(base_url, page_name)
       .then(response => {
         const page = parsePage(page_name, response.data)
-        commit('APPEND_PAGE', page)
-        commit('REMOVE_INFLIGHT', page_name)
+        commit('APPEND_PAGE', { routeURL: page_stem, page })
+        commit('REMOVE_INFLIGHT', { routeURL: page_stem, id: page_name })
         return page
       })
       .catch(error => {
-        commit('REMOVE_INFLIGHT', page_name)
+        commit('REMOVE_INFLIGHT', { routeURL: page_stem, id: page_name })
         throw error
       })
-    commit('ADD_INFLIGHT', { page_name, pending })
+    commit('ADD_INFLIGHT', { routeURL: page_stem, page_name, pending })
     return pending
   },
   fetchDependeePages({ dispatch, getters }, payload) {
     const pageName = payload.page_name
+    const page_stem = payload.page_stem
 
-    const dependentPage = getters.getPageById(pageName)
+    const dependentPage = getters.getPageById(page_stem, pageName)
     let pageNames = []
     if (dependentPage) {
       if (Object.prototype.hasOwnProperty.call(dependentPage, 'baseClasses')) {
@@ -65,46 +87,51 @@ export const actions = {
       promises.push(
         dispatch('fetchPage', {
           page_name: pageName,
-          page_stem: payload.page_stem
+          page_stem: payload.page_stem,
+          page_url: payload.page_url
         })
       )
     })
     return Promise.all(promises)
+  },
+  registerBaseURL({ commit }, { baseURL, routeURL }) {
+    commit('REGISTER_BASE_URL', { baseURL, routeURL })
   }
 }
 
 export const getters = {
-  getPageById: state => id => {
-    return state.pages.find(page => page.id === id)
+  getPageById: state => (routeURL, id) => {
+    return state.pages.get(routeURL).find(page => page.id === id)
   },
-  dispalyInflight: state => () => {
-    console.log(state.inflight)
+  // dispalyInflight: state => () => {
+  //   console.log(state.inflight)
+  // },
+  // displayPages: state => () => {
+  //   console.log(state.pages)
+  // },
+  isInflight: state => (routeURL, id) => {
+    return !!state.inflight.get(routeURL).get(id)
   },
-  isInflight: state => id => {
-    return !!state.inflight.get(id)
+  getInflight: state => (routeURL, id) => {
+    return state.inflight.get(routeURL).get(id)
   },
-  getInflight: state => id => {
-    return state.inflight.get(id)
-  },
-  getPageIdForReferenceId: state => reference => {
-    const candidatePage = state.pages.find(page =>
-      reference.startsWith(page.id)
-    )
+  getPageIdForReferenceId: state => (routeURL, reference) => {
+    const candidatePage = state.pages
+      .get(routeURL)
+      .find(page => reference.startsWith(page.id))
     return candidatePage ? candidatePage.id : undefined
   },
-  getPageByName: state => name => {
-    return state.pages.find(page => page.name === name)
-  },
-  getDependeePages: (state, getters) => (id, recursive) => {
-    const originalPage = getters.getPageById(id)
+  getDependeePages: (state, getters) => (routeURL, id, recursive) => {
+    const originalPage = getters.getPageById(routeURL, id)
     let dependentPages = []
     if (Object.prototype.hasOwnProperty.call(originalPage, 'baseClasses')) {
       originalPage.baseClasses.forEach(baseClass => {
         if (baseClass.refId) {
-          const dependentPage = getters.getPageById(baseClass.refId)
+          const dependentPage = getters.getPageById(routeURL, baseClass.refId)
           dependentPages.push(dependentPage)
           if (recursive) {
             const dependentDependentPages = getters.getDependeePages(
+              routeURL,
               dependentPage.id,
               true
             )

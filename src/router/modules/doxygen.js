@@ -16,7 +16,8 @@ export const updateDoxygenRoute = (routeTo, next) => {
   store
     .dispatch('doxygen/fetchPage', {
       page_name: pageName,
-      page_stem: pageStem
+      page_stem: pageStem,
+      page_url: routeTo.meta.baseURL
     })
     .then(page => {
       routeTo.params.data = page
@@ -26,7 +27,8 @@ export const updateDoxygenRoute = (routeTo, next) => {
         store
           .dispatch('doxygen/fetchDependeePages', {
             page_name: pageName,
-            page_stem: pageStem
+            page_stem: pageStem,
+            page_url: routeTo.meta.baseURL
           })
           .then(() => {
             next()

@@ -5,6 +5,9 @@
 </template>
 
 <script>
+// import { mapActions } from 'vuex'
+// import { getPageStem } from '@/router/modules/doxygen'
+
 import DoxygenComponent from '@/components/DoxygenComponent'
 
 export default {
@@ -15,6 +18,11 @@ export default {
   props: {
     data: Object
   }
+  //   this.registerBaseURL({ baseUrl: this.baseURL, routeURL })
+  // },
+  // methods: {
+  //   ...mapActions('doxygen', ['registerBaseURL'])
+  // }
 }
 </script>
 

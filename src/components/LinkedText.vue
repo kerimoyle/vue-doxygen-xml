@@ -48,6 +48,7 @@ export default {
     if (this.item.reference.refKind === 'member') {
       this.derivedLink.hash = this.item.reference.refId
       this.derivedLink.path = this.getPageIdForReferenceId(
+        getPageStem(this.$route),
         this.derivedLink.hash
       )
       if (this.derivedLink.path === undefined) {
@@ -69,7 +70,8 @@ export default {
         let potentialPageName = splitReferenceId.splice(0, attempt).join('_')
         this.fetchPage({
           page_name: potentialPageName,
-          page_stem: getPageStem(this.$route)
+          page_stem: getPageStem(this.$route),
+          page_url: this.$route.meta.baseURL
         })
           .then(response => {
             this.derivedLink.path = response.id
@@ -102,23 +104,6 @@ export default {
     postDecodedText() {
       const postText = this.item.text.split(this.item.linkedText)[1]
       return decodeHTML(postText)
-    },
-    myDerivedLink() {
-      if (this.link) {
-        return this.link
-      }
-      let derivedLink = { path: undefined, hash: undefined }
-      if (this.item.reference.refKind === 'member') {
-        derivedLink.hash = this.item.reference.refId
-        derivedLink.path = this.getPageIdForReferenceId(derivedLink.hash)
-      } else if (this.item.reference.refKind === 'compound') {
-        derivedLink.path = this.item.reference.refId
-        derivedLink.hash = ''
-      } else {
-        console.log('Found a doxygen ref that is not being handled! Eeek.')
-      }
-
-      return derivedLink
     }
   }
 }
