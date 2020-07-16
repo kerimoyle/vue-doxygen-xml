@@ -42,7 +42,6 @@ export default {
   },
   computed: {
     basePath() {
-      console.log('index', this.data)
       return this.$route.fullPath
     }
   }
