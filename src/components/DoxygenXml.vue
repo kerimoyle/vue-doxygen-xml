@@ -1,17 +1,19 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      This is the basic harness for looking at Doxygen XML.
-    </p>
+  <div class="doxygen-xml">
+    <doxygen-component :component-data="data"></doxygen-component>
   </div>
 </template>
 
 <script>
+import DoxygenComponent from '@/components/DoxygenComponent'
+
 export default {
   name: 'DoxygenXml',
+  components: {
+    DoxygenComponent
+  },
   props: {
-    msg: String
+    data: Object
   }
 }
 </script>

@@ -1,19 +1,16 @@
 <template>
   <div class="home">
     <img alt="Project logo" src="@/assets/logo.svg" />
-    <doxygen-xml msg="Welcome to Doxygen XML" />
+    <h1>Welcome to Doxygen XML</h1>
+    <p>
+      This is the basic harness for looking at Doxygen XML.
+    </p>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import DoxygenXml from '@/components/DoxygenXml.vue'
-
 export default {
-  name: 'Home',
-  components: {
-    DoxygenXml
-  }
+  name: 'Home'
 }
 </script>
 

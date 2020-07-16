@@ -1,11 +1,11 @@
 <template>
-  <doxygen-component :component-data="data"></doxygen-component>
+  <doxygen-xml :data="data"></doxygen-xml>
 </template>
 
 <script>
 // @ is an alias to /src
 import { updateDoxygenRoute } from '@/router/modules/doxygen'
-import DoxygenComponent from '@/components/DoxygenComponent'
+import DoxygenXml from '@/components/DoxygenXml'
 
 // This is horrible relies 100% on the fact that the page has finished loading by the time this fires.
 const scrollDelay = 500
@@ -40,7 +40,7 @@ const updateRoute = function(to, from, next) {
 export default {
   name: 'Home',
   components: {
-    DoxygenComponent
+    DoxygenXml
   },
   beforeRouteEnter(routeTo, routeFrom, next) {
     updateRoute(routeTo, routeFrom, next)

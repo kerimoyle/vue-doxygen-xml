@@ -1,4 +1,4 @@
-import DoxygenComponent from './components/DoxygenComponent.vue'
+import DoxygenXml from './components/DoxygenXml.vue'
 export { updateDoxygenRoute } from '@/router/modules/doxygen'
 import * as DoxygenStore from '@/store/modules/doxygen'
 
@@ -12,5 +12,5 @@ function install(Vue, options = {}) {
   options.store.registerModule('doxygen', DoxygenStore)
 }
 
-export { DoxygenComponent }
+export { DoxygenXml }
 export default { install }
