@@ -1,4 +1,4 @@
-import DoxygenIndex from './components/DoxygenIndex.vue'
+import DoxygenComponent from './components/DoxygenComponent.vue'
 export { updateDoxygenRoute } from '@/router/modules/doxygen'
 import * as DoxygenStore from '@/store/modules/doxygen'
 
@@ -12,5 +12,5 @@ function install(Vue, options = {}) {
   options.store.registerModule('doxygen', DoxygenStore)
 }
 
-export { DoxygenIndex }
+export { DoxygenComponent }
 export default { install }
