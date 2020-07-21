@@ -58,7 +58,7 @@ export default {
       this.derivedLink.path = this.item.reference.refId
       this.derivedLink.hash = ''
     } else {
-      console.warn('Found a doxygen ref that is not being handled! Eeek.')
+      throw 'Found a doxygen ref that is not being handled! Eeek.'
     }
   },
   methods: {
@@ -80,9 +80,7 @@ export default {
             this.fetchPageBasedOnReferenceId(referenceId, attempt + 1)
           })
       } else {
-        console.warn(
-          `Could not determine the page that reference '${referenceId}' came from.`
-        )
+        throw `Could not determine the page that reference '${referenceId}' came from.`
       }
     },
     ...mapActions('doxygen', ['fetchPage'])

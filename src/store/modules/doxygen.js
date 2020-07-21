@@ -66,20 +66,25 @@ export const actions = {
     commit('ADD_INFLIGHT', { routeURL: page_stem, page_name, pending })
     return pending
   },
-  fetchDependeePages({ dispatch, getters }, payload) {
-    const pageName = payload.page_name
+  async fetchDependeePages({ dispatch, getters }, payload) {
+    const basePageName = payload.page_name
     const page_stem = payload.page_stem
 
-    const dependentPage = getters.getPageById(page_stem, pageName)
+    let dependentPage = getters.getPageById(page_stem, basePageName)
+    if (dependentPage === undefined) {
+      dependentPage = await dispatch('fetchPage', {
+        page_name: basePageName,
+        page_stem: payload.page_stem,
+        page_url: payload.page_url
+      })
+    }
     let pageNames = []
-    if (dependentPage) {
-      if (Object.prototype.hasOwnProperty.call(dependentPage, 'baseClasses')) {
-        dependentPage.baseClasses.forEach(baseClass => {
-          if (baseClass.refId) {
-            pageNames.push(baseClass.refId)
-          }
-        })
-      }
+    if (Object.prototype.hasOwnProperty.call(dependentPage, 'baseClasses')) {
+      dependentPage.baseClasses.forEach(baseClass => {
+        if (baseClass.refId) {
+          pageNames.push(baseClass.refId)
+        }
+      })
     }
 
     let promises = []
@@ -91,7 +96,15 @@ export const actions = {
           page_url: payload.page_url
         })
       )
+      promises.push(
+        dispatch('fetchDependeePages', {
+          page_name: pageName,
+          page_stem: payload.page_stem,
+          page_url: payload.page_url
+        })
+      )
     })
+
     return Promise.all(promises)
   },
   registerBaseURL({ commit }, { baseURL, routeURL }) {
@@ -128,16 +141,18 @@ export const getters = {
       originalPage.baseClasses.forEach(baseClass => {
         if (baseClass.refId) {
           const dependentPage = getters.getPageById(routeURL, baseClass.refId)
-          dependentPages.push(dependentPage)
-          if (recursive) {
-            const dependentDependentPages = getters.getDependeePages(
-              routeURL,
-              dependentPage.id,
-              true
-            )
-            dependentPages = [
-              ...new Set([...dependentPages, ...dependentDependentPages])
-            ]
+          if (dependentPage !== undefined) {
+            dependentPages.push(dependentPage)
+            if (recursive) {
+              const dependentDependentPages = getters.getDependeePages(
+                routeURL,
+                dependentPage.id,
+                true
+              )
+              dependentPages = [
+                ...new Set([...dependentPages, ...dependentDependentPages])
+              ]
+            }
           }
         }
       })

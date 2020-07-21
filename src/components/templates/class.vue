@@ -249,7 +249,7 @@ export default {
       this.listAllMembersState = !this.listAllMembersState
     },
     getDependees() {
-      return this.getDependeePages(getPageStem(this.$route), this.data.id)
+      return this.getDependeePages(getPageStem(this.$route), this.data.id, true)
     },
     createSimplifiedMember(
       refId,

@@ -5,9 +5,9 @@
 </template>
 
 <script>
-// import { mapActions } from 'vuex'
-// import { getPageStem } from '@/router/modules/doxygen'
+import store from '@/store'
 
+import { getPageStem } from '@/router/modules/doxygen'
 import DoxygenComponent from '@/components/DoxygenComponent'
 
 export default {
@@ -16,32 +16,61 @@ export default {
     DoxygenComponent
   },
   props: {
-    data: Object
+    baseURL: {
+      type: String,
+      default: ''
+    }
+  },
+  data() {
+    return {
+      page: {}
+    }
+  },
+  computed: {
+    data() {
+      return this.page
+    }
+  },
+  watch: {
+    $route: {
+      handler: function(to, from) {
+        if (from === undefined || to.path !== from.path) {
+          this.page = {}
+          this.$route.meta.baseURL = this.baseURL
+          this.fetchPageData(to)
+        }
+      },
+      immediate: true
+    }
+  },
+  methods: {
+    fetchPageData(routeTo) {
+      const mainPage = routeTo.params.pageName === undefined
+      const pageName = mainPage ? 'index' : routeTo.params.pageName
+      const pageStem = getPageStem(routeTo)
+      let _this = this
+      store
+        .dispatch('doxygen/fetchPage', {
+          page_name: pageName,
+          page_stem: pageStem,
+          page_url: _this.baseURL
+        })
+        .then(page => {
+          if (mainPage) {
+            _this.page = page
+          } else {
+            store
+              .dispatch('doxygen/fetchDependeePages', {
+                page_name: pageName,
+                page_stem: pageStem,
+                page_url: _this.baseURL
+              })
+              .then(() => {
+                _this.page = page
+              })
+          }
+        })
+    }
   }
-  //   this.registerBaseURL({ baseUrl: this.baseURL, routeURL })
-  // },
-  // methods: {
-  //   ...mapActions('doxygen', ['registerBaseURL'])
-  // }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-/*
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-*/
-</style>

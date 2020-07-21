@@ -249,7 +249,7 @@ function processMemberDef(memberDef) {
   } else if (kind === 'typedef') {
     item = parsePublicTypedef(memberDef)
   } else {
-    console.warn(`Yikes, we have hit an unknown memberDef '${kind}'`)
+    throw `Yikes, we have hit an unknown memberDef '${kind}'`
   }
 
   return item
@@ -323,12 +323,7 @@ export function parsePage(reference, pageText) {
     } else if (kind === 'class') {
       page = parseClass(compoundDef)
     } else {
-      console.warn(
-        'Dont know what to do with kind:',
-        kind,
-        ' with reference:',
-        reference
-      )
+      throw `Dont know what to do with kind: '${kind}' with '${reference}' reference`
     }
   }
 

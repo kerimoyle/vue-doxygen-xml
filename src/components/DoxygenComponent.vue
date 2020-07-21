@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     componentType() {
-      let _type = undefined
+      let _type = 'loading'
       if (Object.prototype.hasOwnProperty.call(this.componentData, 'id')) {
         const id = this.componentData.id
         if (id === 'index') {
@@ -49,9 +49,7 @@ export default {
         } else if (id.startsWith('namespace')) {
           _type = 'namespace'
         } else {
-          console.warn(
-            `We have come across a page with id '${id}' that is unknown to us things are going to go poorly from here.`
-          )
+          throw `We have come across a page with id '${id}' that is unknown to us things are going to go poorly from here.`
         }
       } else if (
         Object.prototype.hasOwnProperty.call(this.componentData, 'element')
