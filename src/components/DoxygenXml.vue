@@ -19,6 +19,10 @@ export default {
     baseURL: {
       type: String,
       default: ''
+    },
+    scrollDelay: {
+      type: Number,
+      default: 500
     }
   },
   data() {
@@ -36,8 +40,22 @@ export default {
       handler: function(to, from) {
         if (from === undefined || to.path !== from.path) {
           this.page = {}
-          this.$route.meta.baseURL = this.baseURL
           this.fetchPageData(to)
+          if (to.hash) {
+            setTimeout(() => {
+              const elem = document.querySelector(to.hash)
+              window.scrollTo({
+                top: elem.offsetTop,
+                behavior: 'smooth'
+              })
+            }, this.scrollDelay)
+          }
+        } else if (to.path === from.path && to.hash) {
+          const elem = document.querySelector(to.hash)
+          window.scrollTo({
+            top: elem.offsetTop,
+            behavior: 'smooth'
+          })
         }
       },
       immediate: true
