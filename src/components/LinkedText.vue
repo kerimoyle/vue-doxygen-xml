@@ -68,10 +68,11 @@ export default {
         // We are given a reference id so this won't match a page name which we need.
         // So we will split on '_' and then start to stitch a page name together.
         let potentialPageName = splitReferenceId.splice(0, attempt).join('_')
+        const baseURL = this.getBaseUrl(getPageStem(this.$route))
         this.fetchPage({
           page_name: potentialPageName,
           page_stem: getPageStem(this.$route),
-          page_url: this.$route.meta.baseURL
+          page_url: baseURL
         })
           .then(response => {
             this.derivedLink.path = response.id
@@ -87,7 +88,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getPageIdForReferenceId: 'doxygen/getPageIdForReferenceId'
+      getPageIdForReferenceId: 'doxygen/getPageIdForReferenceId',
+      getBaseUrl: 'doxygen/getBaseUrl'
     }),
     decodedText() {
       if (this.item.reference !== null) {

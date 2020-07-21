@@ -128,6 +128,9 @@ export const getters = {
   getInflight: state => (routeURL, id) => {
     return state.inflight.get(routeURL).get(id)
   },
+  getBaseUrl: state => routeURL => {
+    return state.urlMap.get(routeURL)
+  },
   getPageIdForReferenceId: state => (routeURL, reference) => {
     const candidatePage = state.pages
       .get(routeURL)
