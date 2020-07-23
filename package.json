@@ -9,7 +9,6 @@
   "description": "Vue component for Doxygen XML content.",
   "keywords": ["vue", "doxygen", "xml"],
   "main": "dist/vue-doxygen-xml.common.js",
-  "private": true,
   "files": [
     "src",
     "dist/*.js"
