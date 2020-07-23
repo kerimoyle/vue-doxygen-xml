@@ -28,8 +28,10 @@ const childDoxygenComponent = node => {
 
 export const doxygenChildren = {
   components: {
-    DoxygenComponent: () => import('@/components/DoxygenComponent'),
-    LinkedText: () => import('@/components/LinkedText')
+    DoxygenComponent: () =>
+      import(/* webpackPrefetch: true */ '@/components/DoxygenComponent'),
+    LinkedText: () =>
+      import(/* webpackPrefetch: true */ '@/components/LinkedText')
   },
   props: {
     data: {

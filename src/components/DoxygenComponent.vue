@@ -24,7 +24,10 @@ export default {
   },
   computed: {
     loader() {
-      return () => import(`@/components/templates/${this.componentType()}`)
+      return () =>
+        import(
+          /* webpackPrefetch: true */ `@/components/templates/${this.componentType()}`
+        )
     }
   },
   mounted() {
@@ -34,7 +37,8 @@ export default {
       })
       .catch(() => {
         this.defaultComponent = true
-        this.component = () => import('@/components/Default')
+        this.component = () =>
+          import(/* webpackPrefetch: true */ '@/components/Default')
       })
   },
   methods: {
