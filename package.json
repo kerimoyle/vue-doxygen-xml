@@ -1,8 +1,19 @@
 {
   "name": "vue-doxygen-xml",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha.1",
+  "license" : "Apache-2.0",
+  "homepage": "https://github.com/hsorby/vue-doxygen-xml#readme",
+  "bugs": {
+    "url": "https://github.com/hsorby/vue-doxygen-xml/issues"
+  },
+  "description": "Vue component for Doxygen XML content.",
+  "keywords": ["vue", "doxygen", "xml"],
   "main": "dist/vue-doxygen-xml.common.js",
   "private": true,
+  "files": [
+    "src",
+    "dist/*.js"
+  ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
