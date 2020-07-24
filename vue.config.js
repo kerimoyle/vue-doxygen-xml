@@ -10,5 +10,8 @@ module.exports = {
   },
   configureWebpack: {
     externals: process.env.NODE_ENV === 'production' ? getProdExternals() : {}
+  },
+  css: {
+    extract: false
   }
 }
