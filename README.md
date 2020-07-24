@@ -28,6 +28,7 @@ Add the above to your `main.js` application file (this assumes that a standard l
 ### Module component
 
 To use the vue-doxygen-xml component import it in a view and set the `baseURL` for the source XML.
+Example view `Help.vue`:
 ```javascript
 <template>
   <div class="help">
@@ -39,7 +40,7 @@ To use the vue-doxygen-xml component import it in a view and set the `baseURL` f
 import { DoxygenXml } from 'vue-doxygen-xml'
 
 export default {
-  name: 'Home',
+  name: 'Help',
   components: {
     DoxygenXml
   }
