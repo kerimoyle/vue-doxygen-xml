@@ -1,7 +1,7 @@
 ![logo](https://github.com/hsorby/vue-doxygen-xml/raw/master/docs/assetts/vue-doxygen-xml-logo.png)
 # vue-doxygen-xml
 
-[![npm](https://img.shields.io/npm/v/vue-doxygebn-xml.svg) ![npm](https://img.shields.io/npm/dm/vue-doxygen-xml.svg)](https://www.npmjs.com/package/vue-doxygen-xml)
+[![npm](https://img.shields.io/npm/v/vue-doxygen-xml.svg) ![npm](https://img.shields.io/npm/dm/vue-doxygen-xml.svg)](https://www.npmjs.com/package/vue-doxygen-xml)
 [![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
 
 Vue component for displaying Doxygen XML content.
