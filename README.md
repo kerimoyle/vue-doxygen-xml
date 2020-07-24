@@ -1,4 +1,4 @@
-![logo](https://github.com/hsorby/vue-doxygen-xml/blob/master/docs/assetts/vue-doxygen-xml-logo.png)
+![logo](https://github.com/hsorby/vue-doxygen-xml/raw/master/docs/assetts/vue-doxygen-xml-logo.png)
 # vue-doxygen-xml
 
 [![npm](https://img.shields.io/npm/v/vue-doxygebn-xml.svg) ![npm](https://img.shields.io/npm/dm/vue-doxygen-xml.svg)](https://www.npmjs.com/package/vue-doxygen-xml)
