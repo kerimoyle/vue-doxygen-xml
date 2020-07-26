@@ -64,9 +64,10 @@ vue-doxygen-xml requires that you use vue-router.  To add a vue-doxygen-xml rout
 
 Again assuming standard layout.
 
-## Example
+## Examples
 
 For a complete example of a Vue application using vue-doxygen-xml look at https://github.com/hsorby/example-vue-doxygen-xml.
+The master branch has a basic example of how vue-doxygen-xml may be used and the `multi_version` branch has an example of how vue-doxygen-xml may be used for different versions of Doxygen XML output.
 
 ---
 
