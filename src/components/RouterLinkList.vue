@@ -4,7 +4,7 @@
       <router-link :to="link.refId" :key="link.refId">{{
         link.name
       }}</router-link>
-      <span v-if="linkCount > 2" :key="'span_' + link.refId">, </span>
+      <span v-if="linkCount > 1" :key="'span_' + link.refId">, </span>
     </template>
     <template v-if="linkCount > 1">
       <span>and </span>

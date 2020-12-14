@@ -323,7 +323,7 @@ export function parsePage(reference, pageText) {
     } else if (kind === 'class') {
       page = parseClass(compoundDef)
     } else {
-      throw `Dont know what to do with kind: '${kind}' with '${reference}' reference`
+      throw `Don't know what to do with kind: '${kind}' with '${reference}' reference`
     }
   }
 
