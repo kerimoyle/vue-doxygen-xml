@@ -11,10 +11,10 @@
 </template>
 
 <script>
-import { decodeHTML } from '@/js/utilities'
+import { decodeHTML } from '../js/utilities'
 
-import BriefDescription from '@/components/BriefDescription'
-import LinkedText from '@/components/LinkedText'
+import BriefDescription from './BriefDescription'
+import LinkedText from './LinkedText'
 
 export default {
   name: 'Typedef',

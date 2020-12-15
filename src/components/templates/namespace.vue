@@ -48,11 +48,11 @@
 </template>
 
 <script>
-import BriefDescription from '@/components/BriefDescription'
-import PublicFunction from '@/components/PublicFunction'
-import Typedef from '@/components/Typedef'
+import BriefDescription from '../BriefDescription'
+import PublicFunction from '../PublicFunction'
+import Typedef from '../Typedef'
 
-import { isEmptyTextElement, decodeHTML } from '@/js/utilities'
+import { isEmptyTextElement, decodeHTML } from '../../js/utilities'
 
 export default {
   name: 'Namespace',

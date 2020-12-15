@@ -12,7 +12,7 @@
     "doxygen",
     "xml"
   ],
-  "main": "dist/vue-doxygen-xml.common.js",
+  "main": "./src/index.js",
   "files": [
     "src",
     "dist/*.js"
