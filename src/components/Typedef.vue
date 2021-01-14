@@ -1,7 +1,7 @@
 <template>
   <dl :id="data.id" class="typedef">
     <dt class="typedef-name">
-      {{ processedName }} 
+      {{ name }} 
     </dt>
     <dt>
       <BriefDescription :data="briefDescription" />
@@ -31,7 +31,7 @@ export default {
     processedDefinition() {
       return decodeHTML(this.data.definition)
     },
-    processedName() {
+    name() {
       return this.data.name
     },
     briefDescription() {
